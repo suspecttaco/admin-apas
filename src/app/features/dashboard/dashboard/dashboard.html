@@ -1,0 +1,110 @@
+<div class="dashboard-container">
+
+  <h2>Bienvenido al sistema APAS</h2>
+
+  @if (esAdmin()) {
+    <p class="subtitulo">Panel de administracion del sistema</p>
+    <div class="tarjetas">
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>school</mat-icon>
+          <mat-card-title>Escuelas</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/escuelas">Ver escuelas</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>people</mat-icon>
+          <mat-card-title>Usuarios</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/usuarios">Ver usuarios</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>manage_accounts</mat-icon>
+          <mat-card-title>Roles y Permisos</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/roles">Ver roles</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>menu_book</mat-icon>
+          <mat-card-title>Catalogos</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/catalogos">Ver catalogos</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+
+  @if (esSupervisor()) {
+    <p class="subtitulo">Panel de supervision escolar</p>
+    <div class="tarjetas">
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>school</mat-icon>
+          <mat-card-title>Escuelas</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/escuelas">Ver escuelas</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>menu_book</mat-icon>
+          <mat-card-title>Catalogos</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/catalogos">Ver catalogos</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+
+  @if (esDirector()) {
+    <p class="subtitulo">Panel de direccion escolar</p>
+    <div class="tarjetas">
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>badge</mat-icon>
+          <mat-card-title>Empleados</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/empleados">Ver empleados</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>description</mat-icon>
+          <mat-card-title>Padron</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/padron">Generar padron</a>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>bar_chart</mat-icon>
+          <mat-card-title>Estadisticas</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-button routerLink="/estadisticas">Ver estadisticas</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+
+</div>

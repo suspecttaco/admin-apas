@@ -1,0 +1,26 @@
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+.campo-completo {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+  margin-bottom: 4px;
+}
+
+mat-card-subtitle {
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+mat-spinner {
+  display: inline-block;
+}

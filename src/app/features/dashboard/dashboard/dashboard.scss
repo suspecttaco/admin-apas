@@ -1,0 +1,29 @@
+.dashboard-container {
+  max-width: 1200px;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.subtitulo {
+  font-size: 14px;
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 24px;
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+mat-card {
+  cursor: default;
+}
+
+mat-icon[mat-card-avatar] {
+  color: var(--mat-sys-primary);
+}
