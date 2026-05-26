@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar escuela' : 'Nueva escuela' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="100" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Clave CCT</mat-label>
+      <input matInput formControlName="clave" maxlength="10" />
+      @if (form.get('clave')?.hasError('required') && form.get('clave')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Zona escolar</mat-label>
+      <input matInput formControlName="zonaEscolar" maxlength="5" />
+      @if (form.get('zonaEscolar')?.hasError('required') && form.get('zonaEscolar')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nivel</mat-label>
+      <input matInput formControlName="nivel" maxlength="20" />
+      @if (form.get('nivel')?.hasError('required') && form.get('nivel')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Telefono</mat-label>
+      <input matInput formControlName="numTel" maxlength="10" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Correo</mat-label>
+      <input matInput formControlName="correo" type="email" maxlength="50" />
+      @if (form.get('correo')?.hasError('email') && form.get('correo')?.touched) {
+        <mat-error>Correo invalido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Domicilio</mat-label>
+      <input matInput formControlName="domicilio" maxlength="255" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Localidad</mat-label>
+      <input matInput formControlName="localidad" maxlength="50" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Municipio</mat-label>
+      <input matInput formControlName="municipio" maxlength="50" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <input matInput formControlName="estado" maxlength="50" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Codigo postal</mat-label>
+      <input matInput formControlName="codigoPostal" maxlength="5" />
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
