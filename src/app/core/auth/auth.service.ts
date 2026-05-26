@@ -1,11 +1,13 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { LoginDto, TokenResponse, JwtPayload } from '../models/usuario.model';
+import { RolUsuario } from '../models/rol-usuario.model';
 
 const TOKEN_KEY = 'apas_token';
+const ROL_KEY = 'apas_rol';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -13,6 +15,7 @@ export class AuthService {
   private router = inject(Router);
 
   private _payload = signal<JwtPayload | null>(this.leerPayloadGuardado());
+  private _nombreRol = signal<string | null>(localStorage.getItem(ROL_KEY));
 
   // Estado derivado disponible para toda la app
   readonly usuario = computed(() => this._payload());
@@ -20,19 +23,30 @@ export class AuthService {
   readonly idRol = computed(() => this._payload()?.idRol ?? null);
   readonly idEsc = computed(() => this._payload()?.idEsc ?? null);
   readonly tieneEscuela = computed(() => !!this._payload()?.idEsc);
+  readonly nombreRol = computed(() => this._nombreRol());
 
   login(dto: LoginDto) {
     return this.http.post<TokenResponse>(`${environment.apiUrl}/auth/login`, dto).pipe(
       tap(res => {
         localStorage.setItem(TOKEN_KEY, res.token);
         this._payload.set(this.decodificarToken(res.token));
+      }),
+      switchMap(() => {
+        const idRol = this._payload()?.idRol;
+        return this.http.get<RolUsuario>(`${environment.apiUrl}/roles/${idRol}`);
+      }),
+      tap(rol => {
+        localStorage.setItem(ROL_KEY, rol.nombre);
+        this._nombreRol.set(rol.nombre);
       })
     );
   }
 
   logout() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(ROL_KEY);
     this._payload.set(null);
+    this._nombreRol.set(null);
     this.router.navigate(['/login']);
   }
 
