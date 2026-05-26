@@ -1,6 +1,6 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { RouterOutlet, RouterLink, RouterLinkActive, ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs/operators';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,19 +34,13 @@ export class MainLayoutComponent {
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
 
-  // Detecta si el dispositivo es movil
   esMovil = toSignal(
     this.breakpointObserver.observe(Breakpoints.Handset).pipe(map(r => r.matches)),
     { initialValue: false }
   );
 
-  // Nombre del usuario activo tomado del token
-  nombreUsuario = computed(() => {
-    const payload = this.auth.usuario();
-    return payload?.id ?? '';
-  });
+  nombreUsuario = computed(() => this.auth.nombre() ?? '');
 
-  // Titulo de la ruta activa tomado del data de cada ruta
   tituloRuta = toSignal(
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
@@ -65,7 +59,6 @@ export class MainLayoutComponent {
     return roles.includes(nombreRol);
   }
 
-  // Muestra la seccion de escuela si el usuario tiene escuela asignada
   mostrarSeccionEscuela(): boolean {
     return this.auth.tieneEscuela();
   }

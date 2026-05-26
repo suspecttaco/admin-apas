@@ -41,14 +41,14 @@
           <span matListItemTitle>Roles</span>
         </a>
 
-        <a mat-list-item routerLink="/permisos" routerLinkActive="activo">
-          <mat-icon matListItemIcon>lock</mat-icon>
-          <span matListItemTitle>Permisos</span>
+        <a mat-list-item routerLink="/catalogos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>menu_book</mat-icon>
+          <span matListItemTitle>Catalogos</span>
         </a>
       }
 
-      <!-- Admin y Supervisor -->
-      @if (mostrarSeccion(['admin', 'supervisor'])) {
+      <!-- Supervisor -->
+      @if (mostrarSeccion(['supervisor'])) {
         <a mat-list-item routerLink="/catalogos" routerLinkActive="activo">
           <mat-icon matListItemIcon>menu_book</mat-icon>
           <span matListItemTitle>Catalogos</span>
