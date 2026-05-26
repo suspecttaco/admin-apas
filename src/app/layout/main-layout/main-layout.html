@@ -1,0 +1,144 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav
+    #sidenav
+    [mode]="esMovil() ? 'over' : 'side'"
+    [opened]="!esMovil()"
+    class="sidenav">
+
+    <div class="sidenav-header">
+      <span class="sidenav-titulo">APAS</span>
+      <span class="sidenav-subtitulo">SEPyC Sinaloa</span>
+    </div>
+
+    <mat-nav-list>
+
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="activo">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
+      <!-- Admin y Supervisor -->
+      @if (mostrarSeccion(['admin', 'supervisor'])) {
+        <mat-divider />
+        <p class="nav-seccion">Administracion</p>
+
+        <a mat-list-item routerLink="/escuelas" routerLinkActive="activo">
+          <mat-icon matListItemIcon>school</mat-icon>
+          <span matListItemTitle>Escuelas</span>
+        </a>
+      }
+
+      <!-- Solo Admin -->
+      @if (mostrarSeccion(['admin'])) {
+        <a mat-list-item routerLink="/usuarios" routerLinkActive="activo">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Usuarios</span>
+        </a>
+
+        <a mat-list-item routerLink="/roles" routerLinkActive="activo">
+          <mat-icon matListItemIcon>manage_accounts</mat-icon>
+          <span matListItemTitle>Roles</span>
+        </a>
+
+        <a mat-list-item routerLink="/permisos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>lock</mat-icon>
+          <span matListItemTitle>Permisos</span>
+        </a>
+      }
+
+      <!-- Admin y Supervisor -->
+      @if (mostrarSeccion(['admin', 'supervisor'])) {
+        <a mat-list-item routerLink="/catalogos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>menu_book</mat-icon>
+          <span matListItemTitle>Catalogos</span>
+        </a>
+      }
+
+      <!-- Director, Admin y Supervisor con escuela -->
+      @if (mostrarSeccionEscuela()) {
+        <mat-divider />
+        <p class="nav-seccion">Escuela</p>
+
+        <a mat-list-item routerLink="/ciclos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>calendar_today</mat-icon>
+          <span matListItemTitle>Ciclos</span>
+        </a>
+
+        <a mat-list-item routerLink="/turnos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>schedule</mat-icon>
+          <span matListItemTitle>Turnos</span>
+        </a>
+
+        <a mat-list-item routerLink="/grupos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>groups</mat-icon>
+          <span matListItemTitle>Grupos</span>
+        </a>
+
+        <a mat-list-item routerLink="/empleados" routerLinkActive="activo">
+          <mat-icon matListItemIcon>badge</mat-icon>
+          <span matListItemTitle>Empleados</span>
+        </a>
+
+        <a mat-list-item routerLink="/coberturas" routerLinkActive="activo">
+          <mat-icon matListItemIcon>swap_horiz</mat-icon>
+          <span matListItemTitle>Coberturas</span>
+        </a>
+
+        <a mat-list-item routerLink="/plazas" routerLinkActive="activo">
+          <mat-icon matListItemIcon>work</mat-icon>
+          <span matListItemTitle>Plazas</span>
+        </a>
+
+        <a mat-list-item routerLink="/horarios" routerLinkActive="activo">
+          <mat-icon matListItemIcon>table_view</mat-icon>
+          <span matListItemTitle>Horarios</span>
+        </a>
+
+        <a mat-list-item routerLink="/estadisticas" routerLinkActive="activo">
+          <mat-icon matListItemIcon>bar_chart</mat-icon>
+          <span matListItemTitle>Estadisticas</span>
+        </a>
+
+        <a mat-list-item routerLink="/padron" routerLinkActive="activo">
+          <mat-icon matListItemIcon>description</mat-icon>
+          <span matListItemTitle>Padron</span>
+        </a>
+      }
+
+      <!-- Catalogos solo lectura para director -->
+      @if (mostrarSeccion(['director'])) {
+        <mat-divider />
+        <p class="nav-seccion">Catalogos</p>
+
+        <a mat-list-item routerLink="/catalogos" routerLinkActive="activo">
+          <mat-icon matListItemIcon>menu_book</mat-icon>
+          <span matListItemTitle>Catalogos</span>
+        </a>
+      }
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar class="topbar">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="topbar-titulo">{{ tituloRuta() }}</span>
+      <span class="spacer"></span>
+      <span class="topbar-usuario">{{ nombreUsuario() }}</span>
+      <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesion">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <main class="contenido">
+      <router-outlet />
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
