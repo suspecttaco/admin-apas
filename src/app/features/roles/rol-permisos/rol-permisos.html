@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Permisos — {{ data.nombre }}</h2>
+
+<mat-dialog-content>
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <div class="permisos-grid">
+    @for (permiso of permisos(); track permiso.id) {
+      <mat-checkbox
+        [checked]="seleccionados().has(permiso.id)"
+        (change)="togglePermiso(permiso.id)">
+        {{ permiso.nombre }}
+      </mat-checkbox>
+    }
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="guardando()">
+    {{ guardando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
