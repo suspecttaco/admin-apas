@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre completo</mat-label>
+      <input matInput formControlName="nombre" maxlength="100" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Correo electronico</mat-label>
+      <input matInput formControlName="correo" type="email" maxlength="100" />
+      @if (form.get('correo')?.hasError('required') && form.get('correo')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+      @if (form.get('correo')?.hasError('email') && form.get('correo')?.touched) {
+        <mat-error>Correo invalido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ data?.id ? 'Nueva contrasena (opcional)' : 'Contrasena' }}</mat-label>
+      <input matInput formControlName="contra" type="password" />
+      @if (form.get('contra')?.hasError('required') && form.get('contra')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+      @if (form.get('contra')?.hasError('minlength') && form.get('contra')?.touched) {
+        <mat-error>Minimo 6 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="idRol" (selectionChange)="onRolChange()">
+        @for (rol of roles(); track rol.id) {
+          <mat-option [value]="rol.id">{{ rol.nombre }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('idRol')?.hasError('required') && form.get('idRol')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Solo visible si el rol seleccionado requiere escuela -->
+    @if (requiereEscuela()) {
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Escuela</mat-label>
+        <mat-select formControlName="idEsc">
+          @for (esc of escuelas(); track esc.id) {
+            <mat-option [value]="esc.id">{{ esc.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('idEsc')?.hasError('required') && form.get('idEsc')?.touched) {
+          <mat-error>Requerido</mat-error>
+        }
+      </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
