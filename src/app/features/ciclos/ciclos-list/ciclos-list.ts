@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, effect } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,7 @@ import { Ciclos } from '../ciclos';
 import { CicloForm } from '../ciclo-form/ciclo-form';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { AuthService } from '../../../core/auth/auth.service';
+import { EscuelaSelector } from '../../../shared/components/escuela-selector/escuela-selector';
 
 @Component({
   selector: 'app-ciclos-list',
@@ -25,20 +26,27 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatProgressBarModule,
     MatTooltipModule,
     MatChipsModule,
+    EscuelaSelector,
   ],
   templateUrl: './ciclos-list.html',
   styleUrl: './ciclos-list.scss',
 })
-export class CiclosList implements OnInit {
+export class CiclosList {
   private service = inject(Ciclos);
   private dialog  = inject(MatDialog);
-  private auth    = inject(AuthService);
+  auth = inject(AuthService);
 
   columnas = ['nombre', 'fInicio', 'fFin', 'activo', 'acciones'];
   ciclos   = signal<Ciclo[]>([]);
   cargando = signal(false);
 
-  ngOnInit() { this.cargar(); }
+  constructor() {
+    // Recarga cuando cambia la escuela activa
+    effect(() => {
+      if (this.auth.idEsc()) this.cargar();
+      else this.ciclos.set([]);
+    });
+  }
 
   cargar() {
     this.cargando.set(true);

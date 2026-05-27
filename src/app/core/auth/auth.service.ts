@@ -6,26 +6,30 @@ import { environment } from '../../../environments/environment';
 import { LoginDto, TokenResponse, JwtPayload, Usuario } from '../models/usuario.model';
 import { RolUsuario } from '../models/rol-usuario.model';
 
-const TOKEN_KEY   = 'apas_token';
-const ROL_KEY     = 'apas_rol';
-const NOMBRE_KEY  = 'apas_nombre';
+const TOKEN_KEY  = 'apas_token';
+const ROL_KEY    = 'apas_rol';
+const NOMBRE_KEY = 'apas_nombre';
+const ESC_KEY    = 'apas_esc_id';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private http = inject(HttpClient);
+  private http   = inject(HttpClient);
   private router = inject(Router);
 
   private _payload    = signal<JwtPayload | null>(this.leerPayloadGuardado());
   private _nombreRol  = signal<string | null>(localStorage.getItem(ROL_KEY));
   private _nombre     = signal<string | null>(localStorage.getItem(NOMBRE_KEY));
+  private _idEscActiva = signal<string | null>(localStorage.getItem(ESC_KEY));
 
-  readonly usuario        = computed(() => this._payload());
+  readonly usuario         = computed(() => this._payload());
   readonly estaAutenticado = computed(() => this._payload() !== null);
-  readonly idRol          = computed(() => this._payload()?.idRol ?? null);
-  readonly idEsc          = computed(() => this._payload()?.idEsc ?? null);
-  readonly tieneEscuela   = computed(() => !!this._payload()?.idEsc);
-  readonly nombreRol      = computed(() => this._nombreRol());
-  readonly nombre         = computed(() => this._nombre());
+  readonly idRol           = computed(() => this._payload()?.idRol ?? null);
+  readonly nombreRol       = computed(() => this._nombreRol());
+  readonly nombre          = computed(() => this._nombre());
+
+  // idEsc efectivo: viene del token (director) o de la seleccion manual (admin/supervisor)
+  readonly idEsc       = computed(() => this._payload()?.idEsc ?? this._idEscActiva());
+  readonly tieneEscuela = computed(() => !!this.idEsc());
 
   login(dto: LoginDto) {
     return this.http.post<TokenResponse>(`${environment.apiUrl}/auth/login`, dto).pipe(
@@ -52,13 +56,25 @@ export class AuthService {
     );
   }
 
+  // Usado por admin y supervisor para seleccionar una escuela activa
+  seleccionarEscuela(idEsc: string | null) {
+    if (idEsc) {
+      localStorage.setItem(ESC_KEY, idEsc);
+    } else {
+      localStorage.removeItem(ESC_KEY);
+    }
+    this._idEscActiva.set(idEsc);
+  }
+
   logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(ROL_KEY);
     localStorage.removeItem(NOMBRE_KEY);
+    localStorage.removeItem(ESC_KEY);
     this._payload.set(null);
     this._nombreRol.set(null);
     this._nombre.set(null);
+    this._idEscActiva.set(null);
     this.router.navigate(['/login']);
   }
 
@@ -66,7 +82,13 @@ export class AuthService {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  // Decodifica el payload del JWT sin libreria externa
+  // Retorna el idEsc que debe ir en el header x-escuela-id
+  // Solo aplica cuando el idEsc no viene del token
+  getIdEscHeader(): string | null {
+    if (this._payload()?.idEsc) return null;
+    return this._idEscActiva();
+  }
+
   private decodificarToken(token: string): JwtPayload | null {
     try {
       const payload = token.split('.')[1];
@@ -77,7 +99,6 @@ export class AuthService {
     }
   }
 
-  // Lee el token guardado en localStorage al iniciar la app
   private leerPayloadGuardado(): JwtPayload | null {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return null;

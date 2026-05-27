@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +14,8 @@ import { Grados } from '../../catalogos/grados';
 import { Turnos } from '../../turnos/turnos';
 import { GrupoForm } from '../grupo-form/grupo-form';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { AuthService } from '../../../core/auth/auth.service';
+import { EscuelaSelector } from '../../../shared/components/escuela-selector/escuela-selector';
 
 @Component({
   selector: 'app-grupos-list',
@@ -24,15 +26,17 @@ import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm
     MatCardModule,
     MatProgressBarModule,
     MatTooltipModule,
+    EscuelaSelector,
   ],
   templateUrl: './grupos-list.html',
   styleUrl: './grupos-list.scss',
 })
-export class GruposList implements OnInit {
+export class GruposList {
   private service   = inject(Grupos);
   private gradosSvc = inject(Grados);
   private turnosSvc = inject(Turnos);
   private dialog    = inject(MatDialog);
+  auth = inject(AuthService);
 
   columnas = ['nombre', 'idGrado', 'idTurno', 'acciones'];
   grupos   = signal<Grupo[]>([]);
@@ -40,10 +44,16 @@ export class GruposList implements OnInit {
   turnos   = signal<Turno[]>([]);
   cargando = signal(false);
 
-  ngOnInit() {
-    this.cargar();
-    this.gradosSvc.getAll().subscribe(data => this.grados.set(data));
-    this.turnosSvc.getAll().subscribe(data => this.turnos.set(data));
+  constructor() {
+    effect(() => {
+      if (this.auth.idEsc()) {
+        this.cargar();
+        this.gradosSvc.getAll().subscribe(data => this.grados.set(data));
+        this.turnosSvc.getAll().subscribe(data => this.turnos.set(data));
+      } else {
+        this.grupos.set([]);
+      }
+    });
   }
 
   cargar() {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,8 @@ import { Turno } from '../../../core/models/turno.model';
 import { Turnos } from '../turnos';
 import { TurnoForm } from '../turno-form/turno-form';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { AuthService } from '../../../core/auth/auth.service';
+import { EscuelaSelector } from '../../../shared/components/escuela-selector/escuela-selector';
 
 @Component({
   selector: 'app-turnos-list',
@@ -20,19 +22,26 @@ import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm
     MatCardModule,
     MatProgressBarModule,
     MatTooltipModule,
+    EscuelaSelector,
   ],
   templateUrl: './turnos-list.html',
   styleUrl: './turnos-list.scss',
 })
-export class TurnosList implements OnInit {
+export class TurnosList {
   private service = inject(Turnos);
   private dialog  = inject(MatDialog);
+  auth = inject(AuthService);
 
   columnas = ['nombre', 'hInicio', 'hFin', 'acciones'];
   turnos   = signal<Turno[]>([]);
   cargando = signal(false);
 
-  ngOnInit() { this.cargar(); }
+  constructor() {
+    effect(() => {
+      if (this.auth.idEsc()) this.cargar();
+      else this.turnos.set([]);
+    });
+  }
 
   cargar() {
     this.cargando.set(true);

@@ -1,0 +1,18 @@
+@if (esDirector()) {
+  <!-- Director ve su escuela pero no puede cambiarla -->
+  <div class="escuela-info">
+    <mat-icon>school</mat-icon>
+    <span>{{ nombreEscuela() }}</span>
+  </div>
+} @else {
+  <!-- Admin y supervisor pueden seleccionar escuela -->
+  <mat-form-field appearance="outline" class="selector">
+    <mat-label>Escuela</mat-label>
+    <mat-select [value]="idEscActiva()" (selectionChange)="seleccionar($event.value)">
+      <mat-option [value]="null">— Sin seleccionar —</mat-option>
+      @for (esc of escuelas(); track esc.id) {
+        <mat-option [value]="esc.id">{{ esc.nombre }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+}

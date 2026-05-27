@@ -1,1 +1,99 @@
-<p>empleado-detail works!</p>
+<div class="detail-container">
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  @if (empleado()) {
+    <div class="detail-header">
+      <button mat-icon-button routerLink="/empleados" matTooltip="Volver">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2>{{ empleado()!.persona | nombreCompleto }}</h2>
+      <span class="num-control">No. {{ empleado()!.numControl }}</span>
+    </div>
+
+    <div class="detalle-grid">
+
+      <!-- Datos personales -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Datos personales</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <span class="label">RFC</span>
+            <span>{{ empleado()!.rfc }}</span>
+            <span class="label">CURP</span>
+            <span>{{ empleado()!.curp }}</span>
+            <span class="label">Fecha de ingreso</span>
+            <span>{{ empleado()!.fIngreso | date:'dd/MM/yyyy' }}</span>
+            <span class="label">Lugar de nacimiento</span>
+            <span>{{ empleado()!.lugarNac ?? '—' }}</span>
+            <span class="label">Estado civil</span>
+            <span>{{ empleado()!.estadoCivil ?? '—' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Contacto y direccion -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Contacto</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <span class="label">Telefono</span>
+            <span>{{ empleado()!.persona.contacto?.numTel1 ?? '—' }}</span>
+            <span class="label">Correo</span>
+            <span>{{ empleado()!.persona.contacto?.correo ?? '—' }}</span>
+            <span class="label">Domicilio</span>
+            <span>
+              {{ empleado()!.persona.direccion?.calle1 ?? '—' }}
+              {{ empleado()!.persona.direccion?.colonia ? ', ' + empleado()!.persona.direccion?.colonia : '' }}
+            </span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Preparacion profesional -->
+      @if (empleado()!.preparacion) {
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Preparacion profesional</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="info-grid">
+              <span class="label">Estudios</span>
+              <span>{{ empleado()!.preparacion!.estudiosPprof ?? '—' }}</span>
+              <span class="label">Institucion</span>
+              <span>{{ empleado()!.preparacion!.institucion ?? '—' }}</span>
+              <span class="label">Tipo</span>
+              <span>{{ empleado()!.preparacion!.tipoEstudio ?? '—' }}</span>
+              <span class="label">Especialidades</span>
+              <span>{{ empleado()!.preparacion!.especialidades ?? '—' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <!-- Roles laborales -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Rol laboral</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (empleado()!.roles.length === 0) {
+            <p class="sin-datos">Sin rol asignado</p>
+          } @else {
+            @for (er of empleado()!.roles; track er.id) {
+              <mat-chip>{{ er.rol.nombre }}</mat-chip>
+            }
+          }
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  }
+
+</div>

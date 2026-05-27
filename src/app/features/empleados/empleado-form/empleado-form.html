@@ -1,0 +1,195 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar empleado' : 'Nuevo empleado' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-tab-group>
+
+      <!-- Datos personales -->
+      <mat-tab label="Datos personales">
+        <div class="tab-form">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre(s)</mat-label>
+            <input matInput formControlName="nombre" maxlength="50" />
+            @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellido paterno</mat-label>
+            <input matInput formControlName="appP" maxlength="50" />
+            @if (form.get('appP')?.hasError('required') && form.get('appP')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellido materno</mat-label>
+            <input matInput formControlName="appM" maxlength="50" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>RFC</mat-label>
+            <input matInput formControlName="rfc" maxlength="13" />
+            @if (form.get('rfc')?.hasError('required') && form.get('rfc')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CURP</mat-label>
+            <input matInput formControlName="curp" maxlength="18" />
+            @if (form.get('curp')?.hasError('required') && form.get('curp')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de ingreso</mat-label>
+            <input matInput formControlName="fIngreso" type="date" />
+            @if (form.get('fIngreso')?.hasError('required') && form.get('fIngreso')?.touched) {
+              <mat-error>Requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Lugar de nacimiento</mat-label>
+            <input matInput formControlName="lugarNac" maxlength="150" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado civil</mat-label>
+            <mat-select formControlName="estadoCivil">
+              <mat-option value="Soltero">Soltero</mat-option>
+              <mat-option value="Soltera">Soltera</mat-option>
+              <mat-option value="Casado">Casado</mat-option>
+              <mat-option value="Casada">Casada</mat-option>
+              <mat-option value="Divorciado">Divorciado</mat-option>
+              <mat-option value="Divorciada">Divorciada</mat-option>
+              <mat-option value="Viudo">Viudo</mat-option>
+              <mat-option value="Viuda">Viuda</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Direccion -->
+      <mat-tab label="Direccion">
+        <div class="tab-form" formGroupName="direccion">
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Calle y numero</mat-label>
+            <input matInput formControlName="calle1" maxlength="100" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Calle 2 (referencia)</mat-label>
+            <input matInput formControlName="calle2" maxlength="100" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Colonia</mat-label>
+            <input matInput formControlName="colonia" maxlength="100" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Codigo postal</mat-label>
+            <input matInput formControlName="codPost" maxlength="5" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="ciudad" maxlength="50" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <input matInput formControlName="estado" maxlength="50" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Pais</mat-label>
+            <input matInput formControlName="pais" maxlength="50" />
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Contacto -->
+      <mat-tab label="Contacto">
+        <div class="tab-form" formGroupName="contacto">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefono 1</mat-label>
+            <input matInput formControlName="numTel1" maxlength="10" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefono 2</mat-label>
+            <input matInput formControlName="numTel2" maxlength="10" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Correo electronico</mat-label>
+            <input matInput formControlName="correo" type="email" maxlength="50" />
+            @if (form.get('contacto.correo')?.hasError('email') && form.get('contacto.correo')?.touched) {
+              <mat-error>Correo invalido</mat-error>
+            }
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Preparacion profesional -->
+      <mat-tab label="Preparacion">
+        <div class="tab-form" formGroupName="preparacion">
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Estudios profesionales</mat-label>
+            <input matInput formControlName="estudiosPprof" maxlength="200" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Escuela donde realizo estudios</mat-label>
+            <input matInput formControlName="escuelaRealiz" maxlength="200" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de estudio</mat-label>
+            <mat-select formControlName="tipoEstudio">
+              <mat-option value="Titulado">Titulado</mat-option>
+              <mat-option value="Pasante">Pasante</mat-option>
+              <mat-option value="Diplomado">Diplomado</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ultimo grado</mat-label>
+            <input matInput formControlName="ultimoGrado" maxlength="100" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Institucion</mat-label>
+            <input matInput formControlName="institucion" maxlength="200" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="campo-completo">
+            <mat-label>Especialidades</mat-label>
+            <input matInput formControlName="especialidades" />
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

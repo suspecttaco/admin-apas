@@ -6,20 +6,27 @@ import { environment } from '../../../environments/environment';
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
 
-  // Solo agrega el token a requests que van al backend
   if (!req.url.startsWith(environment.apiUrl)) {
     return next(req);
   }
 
   const token = auth.getToken();
+  const idEscHeader = auth.getIdEscHeader();
 
   if (!token) {
     return next(req);
   }
 
-  const reqConToken = req.clone({
-    setHeaders: { Authorization: `Bearer ${token}` }
-  });
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`
+  };
 
-  return next(reqConToken);
+  // Agrega el header de escuela para admin y supervisor cuando tienen una escuela seleccionada
+  if (idEscHeader) {
+    headers['x-escuela-id'] = idEscHeader;
+  }
+
+  const reqConHeaders = req.clone({ setHeaders: headers });
+
+  return next(reqConHeaders);
 };

@@ -1,0 +1,26 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.buscador {
+  flex: 1;
+  max-width: 400px;
+}
+
+table {
+  width: 100%;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 32px;
+  color: var(--mat-sys-on-surface-variant);
+}

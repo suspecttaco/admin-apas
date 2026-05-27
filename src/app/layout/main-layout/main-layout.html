@@ -55,56 +55,54 @@
         </a>
       }
 
-      <!-- Director, Admin y Supervisor con escuela -->
-      @if (mostrarSeccionEscuela()) {
-        <mat-divider />
-        <p class="nav-seccion">Escuela</p>
+      <!-- Seccion escuela — siempre visible -->
+      <mat-divider />
+      <p class="nav-seccion">Escuela</p>
 
-        <a mat-list-item routerLink="/ciclos" routerLinkActive="activo">
-          <mat-icon matListItemIcon>calendar_today</mat-icon>
-          <span matListItemTitle>Ciclos</span>
-        </a>
+      <a mat-list-item routerLink="/ciclos" routerLinkActive="activo">
+        <mat-icon matListItemIcon>calendar_today</mat-icon>
+        <span matListItemTitle>Ciclos</span>
+      </a>
 
-        <a mat-list-item routerLink="/turnos" routerLinkActive="activo">
-          <mat-icon matListItemIcon>schedule</mat-icon>
-          <span matListItemTitle>Turnos</span>
-        </a>
+      <a mat-list-item routerLink="/turnos" routerLinkActive="activo">
+        <mat-icon matListItemIcon>schedule</mat-icon>
+        <span matListItemTitle>Turnos</span>
+      </a>
 
-        <a mat-list-item routerLink="/grupos" routerLinkActive="activo">
-          <mat-icon matListItemIcon>groups</mat-icon>
-          <span matListItemTitle>Grupos</span>
-        </a>
+      <a mat-list-item routerLink="/grupos" routerLinkActive="activo">
+        <mat-icon matListItemIcon>groups</mat-icon>
+        <span matListItemTitle>Grupos</span>
+      </a>
 
-        <a mat-list-item routerLink="/empleados" routerLinkActive="activo">
-          <mat-icon matListItemIcon>badge</mat-icon>
-          <span matListItemTitle>Empleados</span>
-        </a>
+      <a mat-list-item routerLink="/empleados" routerLinkActive="activo">
+        <mat-icon matListItemIcon>badge</mat-icon>
+        <span matListItemTitle>Empleados</span>
+      </a>
 
-        <a mat-list-item routerLink="/coberturas" routerLinkActive="activo">
-          <mat-icon matListItemIcon>swap_horiz</mat-icon>
-          <span matListItemTitle>Coberturas</span>
-        </a>
+      <a mat-list-item routerLink="/coberturas" routerLinkActive="activo">
+        <mat-icon matListItemIcon>swap_horiz</mat-icon>
+        <span matListItemTitle>Coberturas</span>
+      </a>
 
-        <a mat-list-item routerLink="/plazas" routerLinkActive="activo">
-          <mat-icon matListItemIcon>work</mat-icon>
-          <span matListItemTitle>Plazas</span>
-        </a>
+      <a mat-list-item routerLink="/plazas" routerLinkActive="activo">
+        <mat-icon matListItemIcon>work</mat-icon>
+        <span matListItemTitle>Plazas</span>
+      </a>
 
-        <a mat-list-item routerLink="/horarios" routerLinkActive="activo">
-          <mat-icon matListItemIcon>table_view</mat-icon>
-          <span matListItemTitle>Horarios</span>
-        </a>
+      <a mat-list-item routerLink="/horarios" routerLinkActive="activo">
+        <mat-icon matListItemIcon>table_view</mat-icon>
+        <span matListItemTitle>Horarios</span>
+      </a>
 
-        <a mat-list-item routerLink="/estadisticas" routerLinkActive="activo">
-          <mat-icon matListItemIcon>bar_chart</mat-icon>
-          <span matListItemTitle>Estadisticas</span>
-        </a>
+      <a mat-list-item routerLink="/estadisticas" routerLinkActive="activo">
+        <mat-icon matListItemIcon>bar_chart</mat-icon>
+        <span matListItemTitle>Estadisticas</span>
+      </a>
 
-        <a mat-list-item routerLink="/padron" routerLinkActive="activo">
-          <mat-icon matListItemIcon>description</mat-icon>
-          <span matListItemTitle>Padron</span>
-        </a>
-      }
+      <a mat-list-item routerLink="/padron" routerLinkActive="activo">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <span matListItemTitle>Padron</span>
+      </a>
 
       <!-- Catalogos solo lectura para director -->
       @if (mostrarSeccion(['director'])) {
