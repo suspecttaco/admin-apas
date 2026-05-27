@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar plaza' : 'Nueva plaza' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Empleado</mat-label>
+      <mat-select formControlName="idEmpleado">
+        @for (emp of empleados(); track emp.id) {
+          <mat-option [value]="emp.id">
+            {{ emp.numControl }} — {{ emp.persona | nombreCompleto }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('idEmpleado')?.hasError('required') && form.get('idEmpleado')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombramiento</mat-label>
+      <mat-select formControlName="idNombramiento">
+        @for (nom of nombramientos(); track nom.id) {
+          <mat-option [value]="nom.id">{{ nom.nombre }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('idNombramiento')?.hasError('required') && form.get('idNombramiento')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Materia (opcional)</mat-label>
+      <mat-select formControlName="idMateria">
+        <mat-option [value]="null">— Sin materia —</mat-option>
+        @for (mat of materias(); track mat.id) {
+          <mat-option [value]="mat.id">{{ mat.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Codigo de plaza</mat-label>
+      <input matInput formControlName="codigoPlaza" maxlength="30" />
+      @if (form.get('codigoPlaza')?.hasError('required') && form.get('codigoPlaza')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Horas frente a grupo</mat-label>
+      <input matInput formControlName="horasClase" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Horas de descarga</mat-label>
+      <input matInput formControlName="horasDescarga" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Horas de fortalecimiento</mat-label>
+      <input matInput formControlName="horasFortalec" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Evaluado</mat-label>
+      <input matInput formControlName="evaluado" maxlength="255" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Funcion de descarga</mat-label>
+      <input matInput formControlName="funcDescarga" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Observaciones</mat-label>
+      <input matInput formControlName="observaciones" />
+    </mat-form-field>
+
+    <div class="campo-completo">
+      <p class="label-grupos">Grupos asignados</p>
+      <mat-selection-list formControlName="idGrupos">
+        @for (grupo of grupos(); track grupo.id) {
+          <mat-list-option [value]="grupo.id">
+            {{ nombreGrado(grupo.idGrado) }} {{ grupo.nombre }} — {{ nombreTurno(grupo.idTurno) }}
+          </mat-list-option>
+        }
+      </mat-selection-list>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

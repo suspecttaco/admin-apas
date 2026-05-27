@@ -1,1 +1,82 @@
-<p>plazas-list works!</p>
+<div class="list-container">
+
+  <app-escuela-selector />
+
+  @if (auth.idEsc()) {
+
+    <div class="list-header">
+      <mat-form-field appearance="outline" class="buscador">
+        <mat-label>Buscar</mat-label>
+        <input matInput (input)="filtrar($event)" placeholder="Codigo, empleado, nombramiento..." />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <button mat-flat-button (click)="abrirForm(null)">
+        <mat-icon>add</mat-icon>
+        Nueva plaza
+      </button>
+    </div>
+
+    @if (cargando()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+
+    <mat-card>
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="codigoPlaza">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo</th>
+          <td mat-cell *matCellDef="let p">{{ p.codigoPlaza }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="empleado">
+          <th mat-header-cell *matHeaderCellDef>Empleado</th>
+          <td mat-cell *matCellDef="let p">{{ p.empleado?.persona | nombreCompleto }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombramiento">
+          <th mat-header-cell *matHeaderCellDef>Nombramiento</th>
+          <td mat-cell *matCellDef="let p">{{ p.nombramiento.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="materia">
+          <th mat-header-cell *matHeaderCellDef>Materia</th>
+          <td mat-cell *matCellDef="let p">{{ p.materia?.nombre ?? '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="horas">
+          <th mat-header-cell *matHeaderCellDef>Horas</th>
+          <td mat-cell *matCellDef="let p">{{ totalHoras(p) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let p">
+            <button mat-icon-button matTooltip="Editar" (click)="abrirForm(p)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Eliminar" color="warn" (click)="eliminar(p)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell sin-datos" [attr.colspan]="columnas.length">
+            No se encontraron plazas
+          </td>
+        </tr>
+
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons />
+    </mat-card>
+
+  } @else {
+    <p class="sin-escuela">Selecciona una escuela para continuar.</p>
+  }
+
+</div>
