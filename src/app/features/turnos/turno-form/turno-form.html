@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar turno' : 'Nuevo turno' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="25" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora inicio</mat-label>
+      <input matInput formControlName="hInicio" type="time" />
+      @if (form.get('hInicio')?.hasError('required') && form.get('hInicio')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora fin</mat-label>
+      <input matInput formControlName="hFin" type="time" />
+      @if (form.get('hFin')?.hasError('required') && form.get('hFin')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Descripcion</mat-label>
+      <input matInput formControlName="desc" />
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar grupo' : 'Nuevo grupo' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre (letra)</mat-label>
+      <input matInput formControlName="nombre" maxlength="5" placeholder="A" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Grado</mat-label>
+      <mat-select formControlName="idGrado">
+        @for (grado of grados(); track grado.id) {
+          <mat-option [value]="grado.id">{{ grado.nombre }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('idGrado')?.hasError('required') && form.get('idGrado')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Turno</mat-label>
+      <mat-select formControlName="idTurno">
+        @for (turno of turnos(); track turno.id) {
+          <mat-option [value]="turno.id">{{ turno.nombre }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('idTurno')?.hasError('required') && form.get('idTurno')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

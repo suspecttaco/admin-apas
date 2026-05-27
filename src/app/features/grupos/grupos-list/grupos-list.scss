@@ -1,0 +1,32 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+table {
+  width: 100%;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 32px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+  padding-top: 8px;
+  min-width: 420px;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}

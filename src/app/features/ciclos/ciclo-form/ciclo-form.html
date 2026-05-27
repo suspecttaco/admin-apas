@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar ciclo' : 'Nuevo ciclo' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="20" placeholder="2024-2025" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha inicio</mat-label>
+      <input matInput formControlName="fInicio" type="date" />
+      @if (form.get('fInicio')?.hasError('required') && form.get('fInicio')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha fin</mat-label>
+      <input matInput formControlName="fFin" type="date" />
+      @if (form.get('fFin')?.hasError('required') && form.get('fFin')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    @if (!data?.id) {
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Plan de estudios</mat-label>
+        <mat-select formControlName="idPlan">
+          @for (plan of planes(); track plan.id) {
+            <mat-option [value]="plan.id">{{ plan.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('idPlan')?.hasError('required') && form.get('idPlan')?.touched) {
+          <mat-error>Requerido</mat-error>
+        }
+      </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
