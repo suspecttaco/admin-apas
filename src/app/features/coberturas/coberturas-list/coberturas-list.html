@@ -1,1 +1,79 @@
-<p>coberturas-list works!</p>
+<div class="list-container">
+
+  <app-escuela-selector />
+
+  @if (auth.idEsc()) {
+
+    <div class="list-header">
+      <button mat-flat-button (click)="abrirForm()">
+        <mat-icon>add</mat-icon>
+        Nueva cobertura
+      </button>
+    </div>
+
+    @if (cargando()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+
+    <mat-card>
+      <table mat-table [dataSource]="coberturas()">
+
+        <ng-container matColumnDef="numControlTemp">
+          <th mat-header-cell *matHeaderCellDef>No. Temp.</th>
+          <td mat-cell *matCellDef="let c">{{ c.numControlTemp }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="titular">
+          <th mat-header-cell *matHeaderCellDef>Titular</th>
+          <td mat-cell *matCellDef="let c">{{ c.titular.persona | nombreCompleto }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="suplente">
+          <th mat-header-cell *matHeaderCellDef>Suplente</th>
+          <td mat-cell *matCellDef="let c">{{ c.suplente.persona | nombreCompleto }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fInicio">
+          <th mat-header-cell *matHeaderCellDef>Inicio</th>
+          <td mat-cell *matCellDef="let c">{{ c.fInicio | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let c">
+            @if (!c.fFin) {
+              <mat-chip color="primary" highlighted>Abierta</mat-chip>
+            } @else {
+              <mat-chip>Cerrada</mat-chip>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let c">
+            @if (!c.fFin) {
+              <button mat-icon-button matTooltip="Cerrar cobertura" color="warn" (click)="cerrar(c)">
+                <mat-icon>stop_circle</mat-icon>
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell sin-datos" [attr.colspan]="columnas.length">
+            No hay coberturas registradas
+          </td>
+        </tr>
+
+      </table>
+    </mat-card>
+
+  } @else {
+    <p class="sin-escuela">Selecciona una escuela para continuar.</p>
+  }
+
+</div>

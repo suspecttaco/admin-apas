@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Nueva cobertura</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Empleado titular</mat-label>
+      <mat-select formControlName="idEmpleadoTitular">
+        @for (emp of empleados(); track emp.id) {
+          <mat-option [value]="emp.id">
+            {{ emp.numControl }} — {{ emp.persona | nombreCompleto }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('idEmpleadoTitular')?.hasError('required') && form.get('idEmpleadoTitular')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Empleado suplente</mat-label>
+      <mat-select formControlName="idEmpleadoCubre">
+        @for (emp of empleados(); track emp.id) {
+          <mat-option [value]="emp.id">
+            {{ emp.numControl }} — {{ emp.persona | nombreCompleto }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('idEmpleadoCubre')?.hasError('required') && form.get('idEmpleadoCubre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha inicio</mat-label>
+      <input matInput formControlName="fInicio" type="date" />
+      @if (form.get('fInicio')?.hasError('required') && form.get('fInicio')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Motivo (opcional)</mat-label>
+      <input matInput formControlName="motivo" />
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Abrir cobertura' }}
+  </button>
+</mat-dialog-actions>
