@@ -1,0 +1,29 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+  padding-top: 8px;
+  min-width: 520px;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.seccion-titulo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface-variant);
+  margin: 12px 0 4px;
+}
+
+.fila-array {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.campo-flex {
+  flex: 1;
+}

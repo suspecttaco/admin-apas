@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar plan' : 'Nuevo plan de estudios' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="20" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Descripcion</mat-label>
+      <input matInput formControlName="desc" />
+    </mat-form-field>
+
+    <!-- Grados y materias solo al crear -->
+    @if (!data?.id) {
+      <div class="campo-completo seccion-titulo">Grados</div>
+
+      <div formArrayName="grados" class="campo-completo">
+        @for (g of gradosArray.controls; track $index) {
+          <div [formGroupName]="$index" class="fila-array">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="width: 100px;">
+              <mat-label>Numero</mat-label>
+              <input matInput formControlName="numero" type="number" min="1" />
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="quitarGrado($index)">
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </div>
+        }
+        <button mat-stroked-button type="button" (click)="agregarGrado()">
+          <mat-icon>add</mat-icon> Agregar grado
+        </button>
+      </div>
+
+      <div class="campo-completo seccion-titulo">Materias</div>
+
+      <div formArrayName="materias" class="campo-completo">
+        @for (m of materiasArray.controls; track $index) {
+          <div [formGroupName]="$index" class="fila-array">
+            <mat-form-field appearance="outline" class="campo-flex">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre" />
+            </mat-form-field>
+            <button mat-icon-button type="button" color="warn" (click)="quitarMateria($index)">
+              <mat-icon>remove_circle</mat-icon>
+            </button>
+          </div>
+        }
+        <button mat-stroked-button type="button" (click)="agregarMateria()">
+          <mat-icon>add</mat-icon> Agregar materia
+        </button>
+      </div>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ data?.id ? 'Editar rol' : 'Nuevo rol de empleado' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" style="padding-top: 8px; min-width: 360px; display: flex; flex-direction: column; gap: 0;">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" maxlength="25" />
+      @if (form.get('nombre')?.hasError('required') && form.get('nombre')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descripcion</mat-label>
+      <input matInput formControlName="desc" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>
