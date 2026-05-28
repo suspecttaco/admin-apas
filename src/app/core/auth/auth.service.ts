@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { LoginDto, TokenResponse, JwtPayload, Usuario } from '../models/usuario.model';
@@ -15,10 +16,11 @@ const ESC_KEY    = 'apas_esc_id';
 export class AuthService {
   private http   = inject(HttpClient);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
-  private _payload    = signal<JwtPayload | null>(this.leerPayloadGuardado());
-  private _nombreRol  = signal<string | null>(localStorage.getItem(ROL_KEY));
-  private _nombre     = signal<string | null>(localStorage.getItem(NOMBRE_KEY));
+  private _payload     = signal<JwtPayload | null>(this.leerPayloadGuardado());
+  private _nombreRol   = signal<string | null>(localStorage.getItem(ROL_KEY));
+  private _nombre      = signal<string | null>(localStorage.getItem(NOMBRE_KEY));
   private _idEscActiva = signal<string | null>(localStorage.getItem(ESC_KEY));
 
   readonly usuario         = computed(() => this._payload());
@@ -27,8 +29,8 @@ export class AuthService {
   readonly nombreRol       = computed(() => this._nombreRol());
   readonly nombre          = computed(() => this._nombre());
 
-  // idEsc efectivo: viene del token (director) o de la seleccion manual (admin/supervisor)
-  readonly idEsc       = computed(() => this._payload()?.idEsc ?? this._idEscActiva());
+  // idEsc efectivo: del token (director) o de la selección manual (admin/supervisor)
+  readonly idEsc        = computed(() => this._payload()?.idEsc ?? this._idEscActiva());
   readonly tieneEscuela = computed(() => !!this.idEsc());
 
   login(dto: LoginDto) {
@@ -58,6 +60,8 @@ export class AuthService {
 
   // Usado por admin y supervisor para seleccionar una escuela activa
   seleccionarEscuela(idEsc: string | null) {
+    // Cierra cualquier dialog abierto para evitar datos de la escuela anterior
+    this.dialog.closeAll();
     if (idEsc) {
       localStorage.setItem(ESC_KEY, idEsc);
     } else {
@@ -82,11 +86,24 @@ export class AuthService {
     return localStorage.getItem(TOKEN_KEY);
   }
 
-  // Retorna el idEsc que debe ir en el header x-escuela-id
-  // Solo aplica cuando el idEsc no viene del token
-  getIdEscHeader(): string | null {
-    if (this._payload()?.idEsc) return null;
-    return this._idEscActiva();
+  /**
+   * Para GET: devuelve HttpParams con idEsc si el rol no lo tiene en el token.
+   * El director devuelve params vacíos (su idEsc ya va en el token → el backend lo toma de ahí).
+   */
+  getEscParams(): HttpParams {
+    if (this._payload()?.idEsc) return new HttpParams();
+    const id = this._idEscActiva();
+    return id ? new HttpParams().set('idEsc', id) : new HttpParams();
+  }
+
+  /**
+   * Para POST/PUT: devuelve un objeto parcial con idEsc si el rol no lo tiene en el token.
+   * Se mergea con el body del DTO antes de enviarlo.
+   */
+  getEscBody(): { idEsc?: string } {
+    if (this._payload()?.idEsc) return {};
+    const id = this._idEscActiva();
+    return id ? { idEsc: id } : {};
   }
 
   private decodificarToken(token: string): JwtPayload | null {
