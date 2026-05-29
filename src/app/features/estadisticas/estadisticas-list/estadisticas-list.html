@@ -1,1 +1,103 @@
-<p>estadisticas-list works!</p>
+<div class="list-container">
+
+  <app-escuela-selector />
+
+  @if (auth.idEsc()) {
+
+    @if (cargando()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+
+    @for (bloque of bloques(); track bloque.grado) {
+      <mat-card class="bloque">
+        <mat-card-header>
+          <mat-card-title>{{ bloque.grado }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="bloque.stats">
+
+            <ng-container matColumnDef="grupo">
+              <th mat-header-cell *matHeaderCellDef>Grupo</th>
+              <td mat-cell *matCellDef="let s">
+                {{ s.grupo.nombre }} — {{ s.grupo.turno.nombre }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="inscH">
+              <th mat-header-cell *matHeaderCellDef>Insc. H</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.inscH }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="inscM">
+              <th mat-header-cell *matHeaderCellDef>Insc. M</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.inscM }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="altasH">
+              <th mat-header-cell *matHeaderCellDef>Altas H</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.altasH }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="altasM">
+              <th mat-header-cell *matHeaderCellDef>Altas M</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.altasM }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="bajasH">
+              <th mat-header-cell *matHeaderCellDef>Bajas H</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.bajasH }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="bajasM">
+              <th mat-header-cell *matHeaderCellDef>Bajas M</th>
+              <td mat-cell *matCellDef="let s" class="num">{{ s.bajasM }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="existenciaH">
+              <th mat-header-cell *matHeaderCellDef>Exist. H</th>
+              <td mat-cell *matCellDef="let s" class="num bold">{{ s.existenciaH }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="existenciaM">
+              <th mat-header-cell *matHeaderCellDef>Exist. M</th>
+              <td mat-cell *matCellDef="let s" class="num bold">{{ s.existenciaM }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="existenciaT">
+              <th mat-header-cell *matHeaderCellDef>Total</th>
+              <td mat-cell *matCellDef="let s" class="num bold total">{{ s.existenciaT }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="desercion">
+              <th mat-header-cell *matHeaderCellDef>% Desercion</th>
+              <td mat-cell *matCellDef="let s" class="num">
+                {{ s.desercionT | number:'1.1-1' }}%
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let s">
+                <button mat-icon-button matTooltip="Editar" (click)="editar(s)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+
+          </table>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    @if (!cargando() && bloques().length === 0) {
+      <p class="sin-datos">No hay estadisticas registradas para esta escuela.</p>
+    }
+
+  } @else {
+    <p class="sin-escuela">Selecciona una escuela para continuar.</p>
+  }
+
+</div>

@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>Agregar slot de horario</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Grupo</mat-label>
+      <mat-select formControlName="idGrupo">
+        @for (g of grupos(); track g.id) {
+          <mat-option [value]="g.id">
+            {{ nombreGrado(g.idGrado) }} {{ g.nombre }} — {{ nombreTurno(g.idTurno) }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('idGrupo')?.hasError('required') && form.get('idGrupo')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Empleado (opcional)</mat-label>
+      <mat-select formControlName="idEmpleado">
+        <mat-option [value]="null">— Sin empleado —</mat-option>
+        @for (e of empleados(); track e.id) {
+          <mat-option [value]="e.id">
+            {{ e.numControl }} — {{ e.persona | nombreCompleto }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Materia (opcional)</mat-label>
+      <mat-select formControlName="idMateria">
+        <mat-option [value]="null">— Sin materia —</mat-option>
+        @for (m of materias(); track m.id) {
+          <mat-option [value]="m.id">{{ m.nombre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dia</mat-label>
+      <mat-select formControlName="diaSemana">
+        @for (d of dias; track d) {
+          <mat-option [value]="d">{{ d }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('diaSemana')?.hasError('required') && form.get('diaSemana')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <div></div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora inicio</mat-label>
+      <input matInput formControlName="hInicio" type="time" />
+      @if (form.get('hInicio')?.hasError('required') && form.get('hInicio')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hora fin</mat-label>
+      <input matInput formControlName="hFin" type="time" />
+      @if (form.get('hFin')?.hasError('required') && form.get('hFin')?.touched) {
+        <mat-error>Requerido</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

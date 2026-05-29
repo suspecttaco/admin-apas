@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>Estadistica — {{ titulo() }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <p class="seccion">Inscripcion inicial</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="inscH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="inscM" type="number" min="0" />
+    </mat-form-field>
+
+    <p class="seccion">Altas</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="altasH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="altasM" type="number" min="0" />
+    </mat-form-field>
+
+    <p class="seccion">Bajas</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="bajasH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="bajasM" type="number" min="0" />
+    </mat-form-field>
+
+    <p class="seccion">Aprobados en todas las materias</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="aprobTodosH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="aprobTodosM" type="number" min="0" />
+    </mat-form-field>
+
+    <p class="seccion">Reprobados (1 a 4 materias)</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="reprobH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="reprobM" type="number" min="0" />
+    </mat-form-field>
+
+    <p class="seccion">Repetidores (5 o mas materias)</p>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hombres</mat-label>
+      <input matInput formControlName="repetidoresH" type="number" min="0" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Mujeres</mat-label>
+      <input matInput formControlName="repetidoresM" type="number" min="0" />
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-flat-button (click)="guardar()" [disabled]="cargando()">
+    {{ cargando() ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

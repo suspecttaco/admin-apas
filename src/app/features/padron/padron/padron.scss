@@ -1,0 +1,49 @@
+.padron-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 800px;
+}
+
+.generar-card {
+  mat-card-actions {
+    padding: 8px 16px 16px;
+  }
+
+  mat-spinner {
+    display: inline-block;
+    margin-right: 8px;
+  }
+}
+
+.selector-ciclo {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 8px;
+}
+
+.historial-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.sin-datos {
+  text-align: center;
+  padding: 32px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.sin-escuela {
+  color: var(--mat-sys-on-surface-variant);
+}

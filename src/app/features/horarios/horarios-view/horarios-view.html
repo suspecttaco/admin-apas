@@ -1,1 +1,112 @@
-<p>horarios-view works!</p>
+<div class="view-container">
+
+  <app-escuela-selector />
+
+  @if (auth.idEsc()) {
+
+    <div class="controles">
+      <mat-button-toggle-group [value]="modo()" (change)="cambiarModo($event.value)">
+        <mat-button-toggle value="grupo">Por grupo</mat-button-toggle>
+        <mat-button-toggle value="empleado">Por empleado</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      @if (modo() === 'grupo') {
+        <mat-form-field appearance="outline" class="selector">
+          <mat-label>Grupo</mat-label>
+          <mat-select [value]="idSeleccionado()" (selectionChange)="seleccionar($event.value)">
+            <mat-option [value]="null">— Selecciona un grupo —</mat-option>
+            @for (g of grupos(); track g.id) {
+              <mat-option [value]="g.id">
+                {{ nombreGrado(g.idGrado) }} {{ g.nombre }} — {{ nombreTurno(g.idTurno) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline" class="selector">
+          <mat-label>Empleado</mat-label>
+          <mat-select [value]="idSeleccionado()" (selectionChange)="seleccionar($event.value)">
+            <mat-option [value]="null">— Selecciona un empleado —</mat-option>
+            @for (e of empleados(); track e.id) {
+              <mat-option [value]="e.id">
+                {{ e.numControl }} — {{ e.persona | nombreCompleto }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
+      @if (idSeleccionado()) {
+        <button mat-flat-button (click)="abrirForm()">
+          <mat-icon>add</mat-icon>
+          Agregar slot
+        </button>
+      }
+    </div>
+
+    @if (cargando()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+
+    @if (idSeleccionado() && !cargando()) {
+      <mat-card>
+        <div class="grid-scroll">
+          <table class="horario-tabla">
+            <thead>
+              <tr>
+                <th class="col-hora">Hora</th>
+                @for (dia of dias; track dia) {
+                  <th>{{ dia }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (hora of horasUnicas(); track hora) {
+                <tr>
+                  <td class="col-hora">{{ hora }}</td>
+                  @for (dia of dias; track dia) {
+                    <td class="celda">
+                      @for (slot of slotEn(dia, hora); track slot.id) {
+                        <div class="slot">
+                          <span class="slot-materia">{{ slot.materia?.nombre ?? '—' }}</span>
+                          @if (modo() === 'empleado') {
+                            <span class="slot-grupo">
+                              {{ slot.grupo?.grado?.nombre?.charAt(0) }}° {{ slot.grupo?.nombre }}
+                            </span>
+                          } @else {
+                            <span class="slot-grupo">
+                              {{ slot.empleado?.persona | nombreCompleto }}
+                            </span>
+                          }
+                          <button mat-icon-button class="slot-eliminar" matTooltip="Eliminar" (click)="eliminar(slot)">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        </div>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+
+              @if (horasUnicas().length === 0) {
+                <tr>
+                  <td [attr.colspan]="dias.length + 1" class="sin-slots">
+                    Sin horario registrado
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    }
+
+    @if (!idSeleccionado() && !cargando()) {
+      <p class="sin-seleccion">Selecciona un {{ modo() === 'grupo' ? 'grupo' : 'empleado' }} para ver su horario.</p>
+    }
+
+  } @else {
+    <p class="sin-escuela">Selecciona una escuela para continuar.</p>
+  }
+
+</div>
